@@ -1,0 +1,13 @@
+.compass-container {
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.img-fluent {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 450px;
+}
