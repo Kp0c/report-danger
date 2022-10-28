@@ -213,9 +213,10 @@ export class App extends HTMLElement {
     canvas.style.pointerEvents = 'none';
 
     if (this.currentStage === 'draw') {
-      stageInfo.innerHTML = 'Draw a dangerous item movement relative to you direction.<br>' +
+      stageInfo.innerHTML = 'Draw a dangerous item movement relative to you.<br>' +
         'E.g. if it is moving towards you, draw an arrow from the top to the bottom of the screen.<br>' +
-        'Use swipe on screen to draw an arrow.';
+        'Use swipe on screen to draw an arrow.<br/>' +
+        'Compass will be used to determine your heading.';
       canvas.style.pointerEvents = 'auto';
     } else if (this.currentStage === 'approve') {
       stageInfo.innerHTML = 'Approve the direction';
