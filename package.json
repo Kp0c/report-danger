@@ -8,7 +8,8 @@
     "dev-phone": "vite --host 0.0.0.0",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "deploy": "firebase deploy"
   },
   "devDependencies": {
     "typescript": "^4.6.4",

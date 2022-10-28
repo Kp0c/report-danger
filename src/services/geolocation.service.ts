@@ -79,7 +79,6 @@ export class GeolocationService {
    */
   private loadCities(): City[] {
     const data = JSON.parse(citiesJson);
-    console.log(data);
 
     return data.map((city: {
       geometry: {
