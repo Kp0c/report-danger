@@ -11,3 +11,60 @@
   color: #fff;
   font-size: 2rem;
 }
+
+.direction-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.stage-info {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons-container:not([hidden]) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+button {
+  border: 0;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button-approve {
+  background: #00c853;
+  color: #fff;
+}
+
+.button-deny {
+  background: #f14067;
+  color: #fff;
+}
+
+.button-report-more {
+  background: #ff8331;
+  color: #fff;
+}
