@@ -50,9 +50,6 @@ export class Compass extends HTMLElement {
   private dispatchUserLocation(location: Coordinates): void {
     const event = new CustomEvent('user-location', {detail: location});
     this.dispatchEvent(event);
-
-    const debug = this.shadowRoot!.getElementById('debug')!;
-    debug.innerHTML = `Latitude: ${location.latitude} Longitude: ${location.longitude}`;
   };
 
   private setupOrientationServicePermissions() {
