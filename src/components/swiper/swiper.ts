@@ -6,6 +6,10 @@ const templateElem = document.createElement('template');
 templateElem.innerHTML = template;
 
 export class Swiper extends HTMLElement {
+
+  private startX: number = 0;
+  private startY: number = 0;
+
   constructor() {
     super();
 
@@ -30,29 +34,37 @@ export class Swiper extends HTMLElement {
   private setupSwiping(): void {
     const swipeElement = this.shadowRoot!.getElementById('direction-canvas')!;
 
-    let startX: number = 0;
-    let startY: number = 0;
-    let endX: number = 0;
-    let endY: number = 0;
-
     swipeElement.addEventListener('touchstart', (event) => {
-      startX = event.changedTouches[0].pageX;
-      startY = event.changedTouches[0].pageY;
+      this.start(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+    });
+
+    swipeElement.addEventListener('mousedown', (event) => {
+      this.start(event.clientX, event.clientY);
     });
 
     swipeElement.addEventListener('touchend', (event) => {
-      endX = event.changedTouches[0].pageX;
-      endY = event.changedTouches[0].pageY;
-
-      const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-
-      if (length > MAX_SWIPE_LENGTH) {
-        this.drawDirectionArrow(startX, startY, endX, endY);
-
-        const heading = this.getHeading(startX, startY, endX, endY);
-        this.fireHeadingChangedEvent(heading);
-      }
+      this.end(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
     });
+
+    swipeElement.addEventListener('mouseup', (event) => {
+      this.end(event.pageX, event.pageY);
+    });
+  }
+
+  private start(x: number, y: number): void {
+    this.startX = x;
+    this.startY = y;
+  }
+
+  private end(x: number, y: number): void {
+    const length = Math.sqrt(Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2));
+
+    if (length > MAX_SWIPE_LENGTH) {
+      this.drawDirectionArrow(this.startX, this.startY, x, y);
+
+      const heading = this.getHeading(this.startX, this.startY, x, y);
+      this.fireHeadingChangedEvent(heading);
+    }
   }
 
   private fireHeadingChangedEvent(heading: number): void {
