@@ -36,23 +36,16 @@ export class App extends HTMLElement {
     shadow.appendChild(style);
     shadow.appendChild(templateElem.content.cloneNode(true));
 
-    this.load().catch((error) => {
-      this.showError(error);
-    });
+    this.setup();
   }
 
   /**
-   * Load all the data for the application
+   * Setup the app
    *
    * @private
-   *
-   * @returns {Promise<void>}
    */
-  private async load(): Promise<void> {
-    await this.geoService.init('/data/cities.json');
-
+  private setup(): void {
     this.setupCompassEvents();
-    console.log('App loaded');
     this.setupSwiperEvents();
     this.setupButtons();
 

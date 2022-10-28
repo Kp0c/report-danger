@@ -1,17 +1,18 @@
 import { City, Coordinates } from "../models/city";
 import { ANGLE_THRESHOLD } from "../constants";
+import citiesJson from '../data/cities.json?raw';
 
+/**
+ * Service to work with cities and their location
+ */
 export class GeolocationService {
   private cities: City[] = [];
 
   /**
-   * Initializes data
-   *
-   * @param {string} citiesUrl url to cities
-   * @returns {Promise<void>}
+   * constructor
    */
-  async init(citiesUrl: string): Promise<void> {
-    this.cities = await this.loadCities(citiesUrl);
+  constructor() {
+    this.cities = this.loadCities();
   }
 
 
@@ -71,16 +72,14 @@ export class GeolocationService {
 
 
   /**
-   * Load cities from url
+   * Load cities
    *
    * @private
-   * @param {string} citiesUrl url to load cities
-   * @returns {Promise<City[]>} cities
+   * @returns {City[]} cities
    */
-  private async loadCities(citiesUrl: string): Promise<City[]> {
-    const response = await fetch(citiesUrl)
-
-    const data = await response.json();
+  private loadCities(): City[] {
+    const data = JSON.parse(citiesJson);
+    console.log(data);
 
     return data.map((city: {
       geometry: {
