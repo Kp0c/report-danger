@@ -11,6 +11,7 @@ templateElem.innerHTML = template;
 export class Compass extends HTMLElement {
   private isGeolocationInitialized = false;
   private isOrientationServiceInitialized = false;
+  private initEventWasDispatched = false;
 
   /**
    * Called when the element is added to the DOM
@@ -88,9 +89,10 @@ export class Compass extends HTMLElement {
    * @private
    */
   private dispatchInitialized(): void {
-    if (this.isGeolocationInitialized && this.isOrientationServiceInitialized) {
+    if (this.isGeolocationInitialized && this.isOrientationServiceInitialized && !this.initEventWasDispatched) {
       const event = new CustomEvent('initialized');
       this.dispatchEvent(event);
+      this.initEventWasDispatched = true;
     }
   }
 
