@@ -15,8 +15,8 @@ describe("GeolocationService", () => {
 
       it("should predict north", () => {
         const userLocation = {
-          latitude: -73.984,
-          longitude: 40.76,
+          latitude: 49.836832,
+          longitude: 24.023606,
         };
         const city = service.predictCity(userLocation, 0);
 
@@ -25,8 +25,8 @@ describe("GeolocationService", () => {
 
       it("should predict east", () => {
         const userLocation = {
-          latitude: -73.984,
-          longitude: 40.76,
+          latitude: 49.836832,
+          longitude: 24.023606,
         };
         const city = service.predictCity(userLocation, 90);
 
@@ -35,8 +35,8 @@ describe("GeolocationService", () => {
 
       it("should predict south", () => {
         const userLocation = {
-          latitude: -73.984,
-          longitude: 40.76,
+          latitude: 49.836832,
+          longitude: 24.023606,
         };
         const city = service.predictCity(userLocation, 180);
 
@@ -45,8 +45,8 @@ describe("GeolocationService", () => {
 
       it("should predict west", () => {
         const userLocation = {
-          latitude: -73.984,
-          longitude: 40.76,
+          latitude: 49.836832,
+          longitude: 24.023606,
         };
         const city = service.predictCity(userLocation, 270);
 
@@ -63,8 +63,8 @@ describe("GeolocationService", () => {
 
       it('should predict 1km north', () => {
         const userLocation = {
-          longitude: 49.84758,
-          latitude: 24.05954,
+          latitude: 49.836832,
+          longitude: 24.023606,
         };
         const city = service.predictCity(userLocation, 0)!;
 
@@ -80,29 +80,29 @@ const directionTestCities: City[] = [
   {
     capital: 'north',
     coordinates: {
-      longitude: 40.788601,
-      latitude: -73.984,
+      latitude: 50.836832,
+      longitude: 24.023606,
     }
   },
   {
     capital: 'east',
     coordinates: {
-      longitude: 40.759937,
-      latitude: -73.9458984,
+      latitude: 49.836832,
+      longitude: 25.023606,
     }
   },
   {
     capital: 'south',
     coordinates: {
-      longitude: 40.7311399,
-      latitude: -73.984,
+      latitude: 48.836832,
+      longitude: 24.023606,
     }
   },
   {
     capital: 'west',
     coordinates: {
-      longitude: 40.7599937,
-      latitude: -74.0221016,
+      latitude: 49.836832,
+      longitude: 23.023606,
     }
   }
 ];
@@ -111,15 +111,15 @@ const closestTestCities: City[] = [
   {
     capital: '1km',
     coordinates: {
-      longitude: 49.85744,
-      latitude: 24.05960,
+      latitude: 49.846832,
+      longitude: 24.023606,
     }
   },
   {
     capital: '2km',
     coordinates: {
-      longitude: 49.86566,
-      latitude: 24.05991,
+      latitude: 49.856832,
+      longitude: 24.023606,
     }
   }
 ];

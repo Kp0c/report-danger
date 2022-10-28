@@ -17,13 +17,13 @@ export class Compass extends HTMLElement {
     shadow.appendChild(style);
     shadow.appendChild(templateElem.content.cloneNode(true));
 
-    this.setupCompass();
+    this.setupLocation();
+    this.setupOrientationServicePermissions();
   }
 
-  private setupCompass(): void {
-    navigator.geolocation.getCurrentPosition(
+  private setupLocation(): void {
+    navigator.geolocation.watchPosition(
       (position) => {
-        this.setupOrientationServicePermissions();
 
         this.dispatchUserLocation({
           latitude: position.coords.latitude,
@@ -50,6 +50,9 @@ export class Compass extends HTMLElement {
   private dispatchUserLocation(location: Coordinates): void {
     const event = new CustomEvent('user-location', {detail: location});
     this.dispatchEvent(event);
+
+    const debug = this.shadowRoot!.getElementById('debug')!;
+    debug.innerHTML = `Latitude: ${location.latitude} Longitude: ${location.longitude}`;
   };
 
   private setupOrientationServicePermissions() {

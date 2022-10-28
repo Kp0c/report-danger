@@ -34,6 +34,7 @@ export class GeolocationService {
     capital: string,
     distance: number,
   } | null {
+
     const candidates = this.cities
       .map((city) => {
         const cityDirection = this.getDirection(userLocation, city.coordinates);
@@ -108,7 +109,11 @@ export class GeolocationService {
     const x = coordinates.longitude - userLocation.longitude;
     const y = coordinates.latitude - userLocation.latitude;
 
-    return Math.atan2(y, x) * 180 / Math.PI;
+    const degress = Math.atan2(y, x) * 180 / Math.PI;
+
+    const northDegrees = 90 - degress;
+
+    return northDegrees < 0 ? 360 + northDegrees : northDegrees;
   }
 
   /**

@@ -90,8 +90,6 @@ export class App extends HTMLElement {
 
         this.drawnHeading = this.getHeading(startX, startY, endX, endY);
 
-        console.log({arrowHeading: this.drawnHeading});
-
         this.setStage('approve');
       }
     });
@@ -110,8 +108,6 @@ export class App extends HTMLElement {
     compass!.addEventListener('heading', (event) => {
       // @ts-ignore
       this.currentHeading = 360 - event.detail; // we need to invert the heading
-
-      console.log({compasHeading: this.currentHeading});
     });
 
     compass!.addEventListener('user-location', (event) => {
@@ -217,18 +213,16 @@ export class App extends HTMLElement {
     canvas.style.pointerEvents = 'none';
 
     if (this.currentStage === 'draw') {
-      stageInfo.innerHTML = 'Draw a dangerous item movement direction';
+      stageInfo.innerHTML = 'Draw a dangerous item movement relative to you direction.<br>' +
+        'E.g. if it is moving towards you, draw an arrow from the top to the bottom of the screen.<br>' +
+        'Use swipe on screen to draw an arrow.';
       canvas.style.pointerEvents = 'auto';
     } else if (this.currentStage === 'approve') {
       stageInfo.innerHTML = 'Approve the direction';
       approveDenyContainer.hidden = false;
-
-      console.log({heading: (this.currentHeading + this.drawnHeading) % 360});
     } else if (this.currentStage === 'info') {
       const heading = (this.currentHeading + this.drawnHeading) % 360;
       const predictedCity = this.geoService.predictCity(this.userLocation, heading);
-
-      console.log(this.drawnHeading, this.currentHeading);
 
       if (predictedCity) {
         stageInfo.innerHTML = `The item heading to the ${predictedCity.capital}. Distance: ${predictedCity.distance} km`;
