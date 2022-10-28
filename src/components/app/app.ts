@@ -7,7 +7,7 @@ import { Swiper } from "../swiper/swiper";
 const templateElem = document.createElement('template');
 templateElem.innerHTML = template;
 
-type stages = 'draw' | 'approve' | 'info';
+type stages = 'init' | 'draw' | 'approve' | 'info';
 
 /**
  * The main app component
@@ -16,7 +16,7 @@ export class App extends HTMLElement {
   private geoService = new GeolocationService();
   private currentHeading = 0;
   private drawnHeading = 0;
-  private currentStage: stages = 'draw';
+  private currentStage: stages = 'init';
   private userLocation: Coordinates = {
     latitude: 0,
     longitude: 0
@@ -49,7 +49,7 @@ export class App extends HTMLElement {
     this.setupSwiperEvents();
     this.setupButtons();
 
-    this.setStage('draw');
+    this.setStage('init');
   }
 
   /**
@@ -101,6 +101,10 @@ export class App extends HTMLElement {
     compass!.addEventListener('user-location', (event) => {
       // @ts-ignore
       this.userLocation = event.detail;
+    });
+
+    compass!.addEventListener('initialized', () => {
+      this.setStage('draw');
     });
   }
 
@@ -165,15 +169,19 @@ export class App extends HTMLElement {
    */
   private renderStageInfo(): void {
     const stageInfo = this.shadowRoot!.getElementById('stage-info')!;
+    const initializing = this.shadowRoot!.getElementById('initializing')!;
     const swiper = this.shadowRoot!.querySelector('rd-swiper')! as Swiper;
     const approveDenyContainer = this.shadowRoot!.getElementById('approve-deny-container')!;
     const reportMoreContainer = this.shadowRoot!.getElementById('report-more-container')!;
 
     approveDenyContainer.hidden = true;
     reportMoreContainer.hidden = true;
+    initializing.hidden = true;
     swiper.style.pointerEvents = 'none';
 
-    if (this.currentStage === 'draw') {
+    if (this.currentStage === 'init') {
+      initializing.hidden = false;
+    } else if (this.currentStage === 'draw') {
       stageInfo.innerHTML = 'Draw a dangerous item movement relative to you.<br>' +
         'E.g. if it is moving towards you, draw an arrow from the top to the bottom of the screen.<br>' +
         'Use swipe on screen to draw an arrow.<br/>' +

@@ -30,6 +30,8 @@ I'm using component based approach with custom elements. All components are in `
 > Note: Make sure that you test app on localhost or added your host to 'unsafely-treat-insecure-origin-as-secure'. Otherwise Chrome won't allow to get 
 > geolocation
 
+> Note 2: if you want to test it on PC, make sure that you enabled orientation sensor in chrome 
+
 ## How to test
 1. Clone the repo
 2. Run `npm install`

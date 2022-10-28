@@ -9,6 +9,9 @@ templateElem.innerHTML = template;
  * The compass component
  */
 export class Compass extends HTMLElement {
+  private isGeolocationInitialized = false;
+  private isOrientationServiceInitialized = false;
+
   /**
    * Called when the element is added to the DOM
    */
@@ -34,6 +37,8 @@ export class Compass extends HTMLElement {
   private setupLocation(): void {
     navigator.geolocation.watchPosition(
       (position) => {
+        this.isGeolocationInitialized = true;
+        this.dispatchInitialized();
 
         this.dispatchUserLocation({
           latitude: position.coords.latitude,
@@ -79,6 +84,17 @@ export class Compass extends HTMLElement {
   };
 
   /**
+   * Called when the component is completed initializing
+   * @private
+   */
+  private dispatchInitialized(): void {
+    if (this.isGeolocationInitialized && this.isOrientationServiceInitialized) {
+      const event = new CustomEvent('initialized');
+      this.dispatchEvent(event);
+    }
+  }
+
+  /**
    * Setup the permissions that are needed for the AbsoluteOrientationSensor
    * @private
    */
@@ -94,6 +110,9 @@ export class Compass extends HTMLElement {
       .then((results) => {
         if (results.every((result) => result.state === "granted")) {
           this.setupAbsoluteOrientationSensor();
+
+          this.isOrientationServiceInitialized = true;
+          this.dispatchInitialized();
         } else {
           this.dispatchError('Permission to use AbsoluteOrientationSensor was denied.');
         }
