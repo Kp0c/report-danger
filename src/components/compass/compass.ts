@@ -5,7 +5,13 @@ import { Coordinates } from "../../models/city";
 const templateElem = document.createElement('template');
 templateElem.innerHTML = template;
 
+/**
+ * The compass component
+ */
 export class Compass extends HTMLElement {
+  /**
+   * Called when the element is added to the DOM
+   */
   constructor() {
     super();
 
@@ -21,6 +27,10 @@ export class Compass extends HTMLElement {
     this.setupOrientationServicePermissions();
   }
 
+  /**
+   * Setup the geolocation watcher
+   * @private
+   */
   private setupLocation(): void {
     navigator.geolocation.watchPosition(
       (position) => {
@@ -37,22 +47,42 @@ export class Compass extends HTMLElement {
     );
   }
 
+  /**
+   * Dispatch an error event
+   * @param {string} errorMessage error message to dispatch
+   * @private
+   */
   private dispatchError(errorMessage: string): void {
     const event = new CustomEvent('error', {detail: errorMessage});
     this.dispatchEvent(event);
   }
 
+  /**
+   * Dispatch an azimuth heading event
+   * @param {number} heading heading to dispatch
+   * @private
+   */
   private dispatchHeading(heading: number): void {
     const event = new CustomEvent('heading', {detail: heading});
     this.dispatchEvent(event);
   }
 
+  /**
+   * Dispatch the user location
+   *
+   * @param {Coordinates} location location to dispatch
+   * @private
+   */
   private dispatchUserLocation(location: Coordinates): void {
     const event = new CustomEvent('user-location', {detail: location});
     this.dispatchEvent(event);
   };
 
-  private setupOrientationServicePermissions() {
+  /**
+   * Setup the permissions that are needed for the AbsoluteOrientationSensor
+   * @private
+   */
+  private setupOrientationServicePermissions(): void {
     Promise.all([
       // @ts-ignore
       navigator.permissions.query({name: "accelerometer"}),
@@ -74,6 +104,11 @@ export class Compass extends HTMLElement {
       });
   }
 
+  /**
+   * Setup the absolute orientation sensor
+   *
+   * @private
+   */
   private setupAbsoluteOrientationSensor(): void {
     const compassImage = this.shadowRoot!.getElementById('compass-image')!;
 
@@ -95,6 +130,12 @@ export class Compass extends HTMLElement {
     sensor.start();
   }
 
+  /**
+   * Convert a quaternion to a heading in degrees (azimuth orientation)
+   *
+   * @param {number[]} q quaternion. [x, y, z, w] format. Name is simplified to be closer to the original formula
+   * @private
+   */
   private quaternionToNorthDegrees(q: number[]): number {
     const heading = Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI);
 

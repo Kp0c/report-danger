@@ -29,6 +29,8 @@ export class GeolocationService {
    *
    * @param {Coordinates} userLocation user location
    * @param {number} direction direction to search
+   *
+   * @returns {capital: string, distance: number} city and distance
    */
   predictCity(userLocation: Coordinates, direction: number): {
     capital: string,
@@ -140,6 +142,13 @@ export class GeolocationService {
     return R * c;
   }
 
+  /**
+   * Convert degrees to radians
+   * @param {number} deg degrees
+   * @private
+   *
+   * @returns {number} radians
+   */
   private deg2rad(deg: number): number {
     return deg * (Math.PI / 180)
   }

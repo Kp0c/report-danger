@@ -1,15 +1,30 @@
 import template from './swiper.html?raw';
 import styles from './swiper.css?raw';
-import { DIRECTION_COLOR, MAX_SWIPE_LENGTH } from "../../constants";
+import { DIRECTION_COLOR, MIN_SWIPE_LENGTH } from "../../constants";
 
 const templateElem = document.createElement('template');
 templateElem.innerHTML = template;
 
+/**
+ * The swiper component
+ */
 export class Swiper extends HTMLElement {
 
+  /**
+   * The x coordinate of the starting point.
+   * @private
+   */
   private startX: number = 0;
+
+  /**
+   * The y coordinate of the starting point.
+   * @private
+   */
   private startY: number = 0;
 
+  /**
+   * Called when the element is added to the DOM
+   */
   constructor() {
     super();
 
@@ -24,6 +39,9 @@ export class Swiper extends HTMLElement {
     this.setupSwiping();
   }
 
+  /**
+   * Clears the canvas.
+   */
   clearCanvas(): void {
     const canvas = this.shadowRoot!.getElementById('direction-canvas')! as HTMLCanvasElement;
     const context = canvas.getContext('2d')!;
@@ -31,6 +49,10 @@ export class Swiper extends HTMLElement {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
+  /**
+   * Sets up the swiping functionality.
+   * @private
+   */
   private setupSwiping(): void {
     const swipeElement = this.shadowRoot!.getElementById('direction-canvas')!;
 
@@ -51,15 +73,27 @@ export class Swiper extends HTMLElement {
     });
   }
 
+  /**
+   * Start the swipe event handler
+   * @param {number} x - The x coordinate of the starting point.
+   * @param {number} y - The y coordinate of the starting point.
+   * @private
+   */
   private start(x: number, y: number): void {
     this.startX = x;
     this.startY = y;
   }
 
+  /**
+   * End the swipe event handler
+   * @param {number} x - The x coordinate of the ending point.
+   * @param {number} y - The y coordinate of the ending point.
+   * @private
+   */
   private end(x: number, y: number): void {
     const length = Math.sqrt(Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2));
 
-    if (length > MAX_SWIPE_LENGTH) {
+    if (length > MIN_SWIPE_LENGTH) {
       this.drawDirectionArrow(this.startX, this.startY, x, y);
 
       const heading = this.getHeading(this.startX, this.startY, x, y);
@@ -67,6 +101,12 @@ export class Swiper extends HTMLElement {
     }
   }
 
+  /**
+   * Fire the heading changed event.
+   *
+   * @param {number} heading - The azimuthal angle in degrees.
+   * @private
+   */
   private fireHeadingChangedEvent(heading: number): void {
     const event = new CustomEvent('heading', {
       detail: heading
@@ -77,6 +117,7 @@ export class Swiper extends HTMLElement {
 
   /**
    * Draw a direction arrow on the canvas with blue color.
+   *
    * @param {number} fromX - The x coordinate of the starting point.
    * @param {number} fromY - The y coordinate of the starting point.
    * @param {number} toX - The x coordinate of the ending point.
@@ -102,6 +143,15 @@ export class Swiper extends HTMLElement {
     this.drawArrowHead(toY, fromY, toX, fromX, context);
   }
 
+  /**
+   * Draw an arrow head on the canvas.
+   * @param {number} toY - The y coordinate of the ending point.
+   * @param {number} fromY - The y coordinate of the starting point.
+   * @param {number} toX - The x coordinate of the ending point.
+   * @param {number} fromX - The x coordinate of the starting point.
+   * @param {CanvasRenderingContext2D} context - The canvas context.
+   * @private
+   */
   private drawArrowHead(toY: number, fromY: number, toX: number, fromX: number, context: CanvasRenderingContext2D): void {
     const arrowLength = 20;
     const angle = Math.atan2(toY - fromY, toX - fromX);
@@ -130,6 +180,14 @@ export class Swiper extends HTMLElement {
     context.fill();
   }
 
+  /**
+   * Get the heading from the starting point to the ending point in azimuthal angle in degrees.
+   * @param {number} startX - The x coordinate of the starting point.
+   * @param {number} startY - The y coordinate of the starting point.
+   * @param {number} endX - The x coordinate of the ending point.
+   * @param {number} endY - The y coordinate of the ending point.
+   * @private
+   */
   private getHeading(startX: number, startY: number, endX: number, endY: number): number {
     const deltaY = endY - startY;
     const deltaX = endX - startX;

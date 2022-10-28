@@ -9,6 +9,9 @@ templateElem.innerHTML = template;
 
 type stages = 'draw' | 'approve' | 'info';
 
+/**
+ * The main app component
+ */
 export class App extends HTMLElement {
   private geoService = new GeolocationService();
   private currentHeading = 0;
@@ -19,6 +22,9 @@ export class App extends HTMLElement {
     longitude: 0
   };
 
+  /**
+   * Called when the element is added to the DOM
+   */
   constructor() {
     super();
 
@@ -35,6 +41,13 @@ export class App extends HTMLElement {
     });
   }
 
+  /**
+   * Load all the data for the application
+   *
+   * @private
+   *
+   * @returns {Promise<void>}
+   */
   private async load(): Promise<void> {
     await this.geoService.init('/data/cities.json');
 
@@ -46,6 +59,11 @@ export class App extends HTMLElement {
     this.setStage('draw');
   }
 
+  /**
+   * Setup the button events
+   *
+   * @private
+   */
   private setupButtons(): void {
     const approveButton = this.shadowRoot!.getElementById('approve-direction')!;
     const denyButton = this.shadowRoot!.getElementById('deny-direction')!;
@@ -67,6 +85,11 @@ export class App extends HTMLElement {
     });
   }
 
+  /**
+   * Setup the compass events (see `rd-compass` component)
+   *
+   * @private
+   */
   private setupCompassEvents(): void {
     const compass = this.shadowRoot!.querySelector('rd-compass');
 
@@ -88,6 +111,11 @@ export class App extends HTMLElement {
     });
   }
 
+  /**
+   * Setup the swiper events (see `rd-swiper` component)
+   *
+   * @private
+   */
   private setupSwiperEvents() {
     const swiper = this.shadowRoot!.querySelector('rd-swiper')!;
 
@@ -100,25 +128,48 @@ export class App extends HTMLElement {
 
   }
 
+  /**
+   * Clear the swiper
+   *
+   * @private
+   */
   private clearSwiper(): void {
     const swiper = this.shadowRoot!.querySelector('rd-swiper')! as Swiper;
 
     swiper.clearCanvas();
   }
 
-  private showError(error: string) {
+  /**
+   * Show an error message
+   *
+   * @param {string} error error message to show
+   * @private
+   */
+  private showError(error: string): void {
     const errorElement = this.shadowRoot!.getElementById('error')!;
 
     errorElement.hidden = false;
     errorElement.innerHTML = error;
   }
 
+  /**
+   * Set the current stage
+   *
+   * @param {stage} stage
+   * @private
+   */
   private setStage(stage: stages): void {
     this.currentStage = stage;
 
     this.renderStageInfo();
   }
 
+  /**
+   * Render the stage info. This will show the correct buttons and hide the others
+   * You can treat this as a state machine
+   *
+   * @private
+   */
   private renderStageInfo(): void {
     const stageInfo = this.shadowRoot!.getElementById('stage-info')!;
     const swiper = this.shadowRoot!.querySelector('rd-swiper')! as Swiper;
